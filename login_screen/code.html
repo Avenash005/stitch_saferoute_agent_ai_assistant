@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SafeRoute Agent Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Geist:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "background": "#131313",
+                    "on-surface-variant": "#c5c6cd",
+                    "on-tertiary": "#053900",
+                    "on-background": "#e5e2e1",
+                    "tertiary-fixed": "#79ff5b",
+                    "on-secondary": "#003733",
+                    "surface-container-low": "#1c1b1b",
+                    "secondary": "#ffffff",
+                    "primary": "#b9c7e4",
+                    "outline-variant": "#44474d",
+                    "surface-container": "#201f1f",
+                    "outline": "#8f9097",
+                    "on-primary": "#233148",
+                    "error": "#ffb4ab",
+                    "error-container": "#93000a",
+                    "on-surface": "#e5e2e1",
+                    "inverse-primary": "#515f78",
+                    "secondary-fixed": "#00fdee",
+                    "surface-variant": "#353534",
+                    "tertiary": "#2ae500",
+                    "on-secondary-fixed-variant": "#00504b",
+                    "inverse-surface": "#e5e2e1",
+                    "on-primary-container": "#74829d",
+                    "on-secondary-container": "#00716a",
+                    "surface-container-high": "#2a2a2a",
+                    "on-secondary-fixed": "#00201d",
+                    "secondary-fixed-dim": "#00ded1",
+                    "on-tertiary-fixed": "#022100",
+                    "surface-dim": "#131313",
+                    "primary-fixed": "#d6e3ff",
+                    "surface-tint": "#b9c7e4",
+                    "surface-container-highest": "#353534",
+                    "surface-bright": "#393939",
+                    "on-tertiary-fixed-variant": "#095300",
+                    "surface": "#131313",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-error": "#690005",
+                    "tertiary-fixed-dim": "#2ae500",
+                    "tertiary-container": "#021f00",
+                    "on-primary-fixed-variant": "#39475f",
+                    "primary-container": "#0a192f",
+                    "on-error-container": "#ffdad6",
+                    "inverse-on-surface": "#313030",
+                    "on-tertiary-container": "#199700",
+                    "primary-fixed-dim": "#b9c7e4",
+                    "secondary-container": "#00fdee",
+                    "on-primary-fixed": "#0d1c32"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-margin": "24px",
+                    "stack-lg": "32px",
+                    "unit": "8px",
+                    "gutter": "16px",
+                    "stack-sm": "8px",
+                    "stack-md": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Geist"],
+                    "label-sm": ["Geist"],
+                    "display-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>.glass-panel {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1)
+    }
+.cyan-glow {
+    box-shadow: 0 0 20px rgba(0, 253, 238, 0.3)
+    }
+.cyan-glow:hover {
+    box-shadow: 0 0 35px rgba(0, 253, 238, 0.5)
+    }
+.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.bg-map-pattern {
+    background-image: linear-gradient(rgba(19, 19, 19, 0.8), rgba(19, 19, 19, 0.95)), url(https://lh3.googleusercontent.com/aida-public/AB6AXuA7dozMF-yqCf73xh4CEqsibQz1LxfDx2f2j8Ulz_tF1GmP1sIfb_2YKymPepBt6p60zgjrMWZzy7k6HtwY_dDLDXTF_yKaO3BiHhZL260DwmPOW83G4oFY3CToYkxlS7mwYhtixPpOFJqE2PE14m5SqIa2KLt42YDYcqFZNSk3K92p-clcExsmuE2UatPcd5AweyNEBCuQk4ssobFW4ts8nKjK8IRISMEHhlYtoRWRPc5AnWwAVDCa49BzSo-hGf4bYZQoB74TP3Jt);
+    background-size: cover;
+    background-position: center
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md overflow-x-hidden">
+<!-- Background Layer -->
+<div class="fixed inset-0 z-0 bg-map-pattern opacity-40 scale-105" data-alt="A highly detailed, cinematic aerial view of an urban city map at night, featuring glowing neon blue and cyan arterial routes. The streets are blurred with a sophisticated bokeh effect, creating a sense of depth and advanced predictive technology. The overall lighting is moody and dark, punctuated by sharp, high-tech grid lines that suggest an AI surveillance or navigation system. The aesthetic is ultra-modern, leaning into dark mode minimalism with a premium, glass-like finish."></div>
+<!-- Top Navigation / Toggle -->
+<nav class="relative z-10 flex justify-between items-center px-container-margin h-16 fixed top-0 w-full bg-background/80 backdrop-blur-xl border-b border-white/10">
+<div class="flex items-center gap-2">
+<span class="font-display-lg text-headline-md-mobile md:text-headline-md text-secondary-fixed tracking-tight">SafeRoute</span>
+<span class="bg-secondary-fixed/10 text-secondary-fixed text-[10px] px-2 py-0.5 rounded-full border border-secondary-fixed/20 font-bold uppercase tracking-widest">Agent</span>
+</div>
+<!-- Language Toggle -->
+<div class="flex bg-surface-container-highest/50 p-1 rounded-full border border-white/10">
+<button class="px-4 py-1.5 rounded-full text-label-md font-label-md transition-all duration-300 bg-secondary-fixed text-on-secondary-fixed" id="lang-en">English</button>
+<button class="px-4 py-1.5 rounded-full text-label-md font-label-md transition-all duration-300 text-on-surface-variant hover:text-on-surface" id="lang-ta">தமிழ்</button>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="relative z-10 flex-1 flex flex-col items-center justify-center px-container-margin pt-20 pb-12">
+<div class="w-full max-w-md space-y-stack-lg">
+<!-- Header Text -->
+<div class="text-center space-y-2">
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-white">Welcome Back</h1>
+<p class="text-on-surface-variant font-body-md">Secure access to the monitoring dashboard</p>
+</div>
+<!-- Login Card -->
+<div class="glass-panel p-stack-lg rounded-2xl space-y-stack-md">
+<!-- Email/Phone Input -->
+<div class="space-y-stack-sm">
+<label class="block text-label-sm font-label-sm text-on-surface-variant ml-1">Email or Phone</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant transition-colors group-focus-within:text-secondary-fixed">person</span>
+<input class="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-secondary-fixed focus:border-secondary-fixed transition-all" placeholder="agent@saferoute.ai" type="text"/>
+</div>
+</div>
+<!-- Password Input -->
+<div class="space-y-stack-sm">
+<div class="flex justify-between items-center ml-1">
+<label class="text-label-sm font-label-sm text-on-surface-variant">Password</label>
+<a class="text-label-sm font-label-sm text-secondary-fixed hover:underline" href="#">Forgot?</a>
+</div>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant transition-colors group-focus-within:text-secondary-fixed">lock</span>
+<input class="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-12 text-white placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-secondary-fixed focus:border-secondary-fixed transition-all" placeholder="••••••••" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-white">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- Primary Action -->
+<button class="w-full bg-secondary-fixed text-on-secondary-fixed font-headline-md text-headline-md py-4 rounded-xl cyan-glow active:scale-[0.98] transition-all duration-200">
+                    Get Started
+                </button>
+<!-- Divider -->
+<div class="flex items-center gap-4 py-2">
+<div class="h-[1px] flex-1 bg-white/10"></div>
+<span class="text-label-sm font-label-sm text-outline">OR CONTINUE WITH</span>
+<div class="h-[1px] flex-1 bg-white/10"></div>
+</div>
+<!-- Social Logins -->
+<div class="grid grid-cols-3 gap-stack-md">
+<button class="flex items-center justify-center p-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all active:scale-95">
+<svg class="w-6 h-6" viewbox="0 0 24 24">
+<path d="M5.266 9.765A7.077 7.077 0 0 1 12 4.909c1.69 0 3.218.6 4.418 1.582L19.91 3C17.782 1.145 15.055 0 12 0 7.27 0 3.198 2.698 1.24 6.65l4.026 3.115z" fill="#EA4335"></path>
+<path d="M16.04 18.013c-1.09.693-2.43 1.078-4.04 1.078a7.077 7.077 0 0 1-6.723-4.823l-4.04 3.114A11.982 11.982 0 0 0 12 24c3.055 0 5.807-1.145 7.962-3.033l-3.922-2.954z" fill="#34A853"></path>
+<path d="M19.962 20.967C22.41 18.823 24 15.65 24 12c0-.825-.075-1.625-.225-2.4H12v4.8h6.75a5.791 5.791 0 0 1-2.51 3.8l3.722 2.767z" fill="#4285F4"></path>
+<path d="M5.277 14.268A7.12 7.12 0 0 1 4.909 12c0-.791.137-1.55.377-2.268L1.26 6.615A11.978 11.978 0 0 0 0 12c0 1.921.453 3.737 1.241 5.35l4.036-3.082z" fill="#FBBC05"></path>
+</svg>
+</button>
+<button class="flex items-center justify-center p-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all active:scale-95">
+<svg class="w-6 h-6 fill-white" viewbox="0 0 24 24">
+<path d="M17.05 20.28c-.96.95-2.06 1.83-3.23 2.06-1.29.25-2.27-.2-3.52-.2-1.25 0-2.38.48-3.53.21-1.17-.26-2.24-1.11-3.19-2.07-2.01-2.03-3.06-5.58-2.06-8.35.49-1.37 1.54-2.26 2.76-2.31 1.15-.05 1.94.59 2.8.59.84 0 1.87-.73 3.2-.62 1.37.1 2.37.66 2.97 1.45-2.5 1.35-2.1 4.88.5 5.92-.58 1.48-1.28 2.87-2.3 3.32zM12.03 5.4c-.05-2.24 1.76-4.14 3.97-4.4.24 2.45-2.14 4.56-3.97 4.4z"></path>
+</svg>
+</button>
+<button class="flex items-center justify-center p-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all active:scale-95">
+<svg class="w-6 h-6" viewbox="0 0 24 24">
+<path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047v-2.66c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.267h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.101 24 12.073z" fill="#1877F2"></path>
+</svg>
+</button>
+</div>
+</div>
+<!-- Registration Link -->
+<p class="text-center text-on-surface-variant text-label-md font-label-md">
+                Don't have an agent account? <a class="text-secondary-fixed hover:underline" href="#">Apply here</a>
+</p>
+</div>
+</main>
+<!-- Footer Stats (Subtle) -->
+<footer class="relative z-10 p-container-margin grid grid-cols-3 gap-4 max-w-lg mx-auto mb-4">
+<div class="text-center">
+<div class="text-secondary-fixed font-bold text-label-md">1.2M+</div>
+<div class="text-[10px] text-on-surface-variant uppercase tracking-wider">Active Routes</div>
+</div>
+<div class="text-center border-x border-white/10">
+<div class="text-secondary-fixed font-bold text-label-md">99.9%</div>
+<div class="text-[10px] text-on-surface-variant uppercase tracking-wider">Uptime</div>
+</div>
+<div class="text-center">
+<div class="text-secondary-fixed font-bold text-label-md">&lt; 2s</div>
+<div class="text-[10px] text-on-surface-variant uppercase tracking-wider">Response</div>
+</div>
+</footer>
+<script>
+        const btnEn = document.getElementById('lang-en');
+        const btnTa = document.getElementById('lang-ta');
+
+        function setLanguage(lang) {
+            if (lang === 'en') {
+                btnEn.classList.add('bg-secondary-fixed', 'text-on-secondary-fixed');
+                btnEn.classList.remove('text-on-surface-variant');
+                btnTa.classList.remove('bg-secondary-fixed', 'text-on-secondary-fixed');
+                btnTa.classList.add('text-on-surface-variant');
+            } else {
+                btnTa.classList.add('bg-secondary-fixed', 'text-on-secondary-fixed');
+                btnTa.classList.remove('text-on-surface-variant');
+                btnEn.classList.remove('bg-secondary-fixed', 'text-on-secondary-fixed');
+                btnEn.classList.add('text-on-surface-variant');
+            }
+        }
+
+        btnEn.addEventListener('click', () => setLanguage('en'));
+        btnTa.addEventListener('click', () => setLanguage('ta'));
+
+        // Input visual feedback
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.classList.add('scale-[1.01]');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.classList.remove('scale-[1.01]');
+            });
+        });
+    </script>
+</body></html>

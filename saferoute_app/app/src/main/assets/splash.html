@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SafeRoute Agent - Welcome</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Geist:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        @keyframes data-stream {
+            0% { transform: translateY(-100%); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(100%); opacity: 0; }
+        }
+        .animate-data-stream {
+            animation: data-stream 8s linear infinite;
+        }
+        .glow-pulse {
+            animation: glow-pulse 3s ease-in-out infinite;
+        }
+        @keyframes glow-pulse {
+            0%, 100% { filter: drop-shadow(0 0 15px rgba(0, 253, 238, 0.3)); }
+            50% { filter: drop-shadow(0 0 30px rgba(0, 253, 238, 0.6)); }
+        }
+        .loading-bar-progress {
+            animation: progress 2.5s ease-in-out forwards;
+        }
+        @keyframes progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "background": "#131313",
+                      "on-surface-variant": "#c5c6cd",
+                      "on-tertiary": "#053900",
+                      "on-background": "#e5e2e1",
+                      "tertiary-fixed": "#79ff5b",
+                      "on-secondary": "#003733",
+                      "surface-container-low": "#1c1b1b",
+                      "secondary": "#ffffff",
+                      "primary": "#b9c7e4",
+                      "outline-variant": "#44474d",
+                      "surface-container": "#201f1f",
+                      "outline": "#8f9097",
+                      "on-primary": "#233148",
+                      "error": "#ffb4ab",
+                      "error-container": "#93000a",
+                      "on-surface": "#e5e2e1",
+                      "inverse-primary": "#515f78",
+                      "secondary-fixed": "#00fdee",
+                      "surface-variant": "#353534",
+                      "tertiary": "#2ae500",
+                      "on-secondary-fixed-variant": "#00504b",
+                      "inverse-surface": "#e5e2e1",
+                      "on-primary-container": "#74829d",
+                      "on-secondary-container": "#00716a",
+                      "surface-container-high": "#2a2a2a",
+                      "on-secondary-fixed": "#00201d",
+                      "secondary-fixed-dim": "#00ded1",
+                      "on-tertiary-fixed": "#022100",
+                      "surface-dim": "#131313",
+                      "primary-fixed": "#d6e3ff",
+                      "surface-tint": "#b9c7e4",
+                      "surface-container-highest": "#353534",
+                      "surface-bright": "#393939",
+                      "on-tertiary-fixed-variant": "#095300",
+                      "surface": "#131313",
+                      "surface-container-lowest": "#0e0e0e",
+                      "on-error": "#690005",
+                      "tertiary-fixed-dim": "#2ae500",
+                      "tertiary-container": "#021f00",
+                      "on-primary-fixed-variant": "#39475f",
+                      "primary-container": "#0a192f",
+                      "on-error-container": "#ffdad6",
+                      "inverse-on-surface": "#313030",
+                      "on-tertiary-container": "#199700",
+                      "primary-fixed-dim": "#b9c7e4",
+                      "secondary-container": "#00fdee",
+                      "on-primary-fixed": "#0d1c32"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-margin": "24px",
+                      "stack-lg": "32px",
+                      "unit": "8px",
+                      "gutter": "16px",
+                      "stack-sm": "8px",
+                      "stack-md": "16px"
+              },
+              "fontFamily": {
+                      "label-md": ["Geist"],
+                      "label-sm": ["Geist"],
+                      "display-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background overflow-hidden selection:bg-secondary-fixed/30">
+<!-- Deep Blue Gradient & Atmospheric Background -->
+<div class="fixed inset-0 z-0 bg-gradient-to-b from-[#0A192F] via-[#0D1C32] to-background">
+<!-- Abstract Map Grid Pattern -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px); background-size: 60px 60px;">
+</div>
+<!-- Animated Data Streams -->
+<div class="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+<div class="absolute top-0 left-1/4 w-[1px] h-64 bg-gradient-to-b from-transparent via-secondary-fixed to-transparent animate-data-stream" style="animation-delay: 0s;"></div>
+<div class="absolute top-0 left-1/2 w-[1px] h-96 bg-gradient-to-b from-transparent via-secondary-fixed to-transparent animate-data-stream" style="animation-delay: 2s;"></div>
+<div class="absolute top-0 left-3/4 w-[1px] h-48 bg-gradient-to-b from-transparent via-secondary-fixed to-transparent animate-data-stream" style="animation-delay: 4s;"></div>
+<div class="absolute top-0 left-[15%] w-[1px] h-80 bg-gradient-to-b from-transparent via-secondary-fixed to-transparent animate-data-stream" style="animation-delay: 1.5s;"></div>
+<div class="absolute top-0 left-[85%] w-[1px] h-72 bg-gradient-to-b from-transparent via-secondary-fixed to-transparent animate-data-stream" style="animation-delay: 5s;"></div>
+</div>
+</div>
+<!-- Main Splash Canvas -->
+<main class="relative z-10 flex flex-col items-center justify-center min-h-screen px-container-margin">
+<!-- Center Brand Cluster -->
+<div class="flex flex-col items-center space-y-stack-lg">
+<!-- Logo Section with Glass Backdrop Blur & Glow -->
+<div class="relative group">
+<div class="absolute -inset-4 bg-secondary-fixed/20 rounded-full blur-2xl group-hover:bg-secondary-fixed/40 transition-all duration-700"></div>
+<div class="relative w-24 h-24 md:w-32 md:h-32 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full flex items-center justify-center shadow-2xl glow-pulse">
+<span class="material-symbols-outlined text-secondary-fixed text-5xl md:text-6xl" style="font-variation-settings: 'FILL' 1;">
+                        shield_with_heart
+                    </span>
+<!-- Orbital Ring Decoration -->
+<div class="absolute inset-0 rounded-full border border-secondary-fixed/30 scale-125 opacity-20 animate-[spin_10s_linear_infinite]"></div>
+</div>
+</div>
+
+<!-- Typography Content -->
+<div class="text-center space-y-2">
+<h1 class="font-display-lg text-headline-lg-mobile md:text-display-lg text-white tracking-tight">
+                    SafeRoute Agent
+                </h1>
+<p class="font-body-md text-on-surface-variant tracking-wide opacity-80 uppercase text-[10px] md:text-xs">
+                    Travel smarter. Stay safer.
+                </p>
+</div>
+<!-- AI Monitoring Indicator / Status -->
+<div class="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-md rounded-full border border-white/5">
+<span class="w-1.5 h-1.5 bg-secondary-fixed rounded-full animate-pulse shadow-[0_0_8px_#00fdee]"></span>
+<span class="font-label-sm text-on-surface-variant/70 tracking-widest uppercase">AI Guardian Active</span>
+</div>
+</div>
+<!-- Progress Indicator -->
+<div class="absolute bottom-16 md:bottom-24 w-full max-w-[240px] px-container-margin">
+<div class="h-[2px] w-full bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-secondary-fixed-dim to-secondary-fixed loading-bar-progress shadow-[0_0_10px_rgba(0,253,238,0.5)]"></div>
+</div>
+<div class="flex justify-between mt-3 font-label-sm text-on-surface-variant/40">
+<span>Initializing Engine</span>
+<span id="progress-percent">0%</span>
+</div>
+</div>
+</main>
+<!-- Footer Identity (Optional/Subtle) -->
+<footer class="fixed bottom-8 w-full text-center z-10 pointer-events-none">
+<span class="font-label-sm text-on-surface-variant/20 tracking-[0.2em] uppercase">
+            Powered by SafeRoute Intelligence
+        </span>
+</footer>
+<script>
+        // Micro-interaction: Progress percentage counter
+        const progressEl = document.getElementById('progress-percent');
+        let count = 0;
+        const target = 100;
+        const duration = 2400; // Match the CSS animation duration slightly less
+        const interval = duration / target;
+
+        const updateCounter = () => {
+            if (count < target) {
+                count++;
+                progressEl.textContent = count + '%';
+                setTimeout(updateCounter, interval);
+            }
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(updateCounter, 100);
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 2800);
+        });
+
+        // Subtle parallax mouse movement effect
+        document.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const x = (clientX / window.innerWidth - 0.5) * 20;
+            const y = (clientY / window.innerHeight - 0.5) * 20;
+            const main = document.querySelector('main');
+            if (main) {
+                main.style.transform = `translate(${x}px, ${y}px)`;
+            }
+        });
+    </script>
+</body></html>

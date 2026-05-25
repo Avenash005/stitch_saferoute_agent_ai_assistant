@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SafeRoute Agent - Live Trip Tracking</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Geist:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(32, 31, 31, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .cyan-glow {
+            box-shadow: 0 0 20px rgba(0, 253, 238, 0.15);
+        }
+        .map-gradient-overlay {
+            background: linear-gradient(to bottom, rgba(19, 19, 19, 0.8) 0%, rgba(19, 19, 19, 0) 15%, rgba(19, 19, 19, 0) 85%, rgba(19, 19, 19, 1) 100%);
+        }
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        .animate-pulse-soft {
+            animation: pulse-soft 3s infinite ease-in-out;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "background": "#131313",
+                        "on-surface-variant": "#c5c6cd",
+                        "on-tertiary": "#053900",
+                        "on-background": "#e5e2e1",
+                        "tertiary-fixed": "#79ff5b",
+                        "on-secondary": "#003733",
+                        "surface-container-low": "#1c1b1b",
+                        "secondary": "#ffffff",
+                        "primary": "#b9c7e4",
+                        "outline-variant": "#44474d",
+                        "surface-container": "#201f1f",
+                        "outline": "#8f9097",
+                        "on-primary": "#233148",
+                        "error": "#ffb4ab",
+                        "error-container": "#93000a",
+                        "on-surface": "#e5e2e1",
+                        "inverse-primary": "#515f78",
+                        "secondary-fixed": "#00fdee",
+                        "surface-variant": "#353534",
+                        "tertiary": "#2ae500",
+                        "on-secondary-fixed-variant": "#00504b",
+                        "inverse-surface": "#e5e2e1",
+                        "on-primary-container": "#74829d",
+                        "on-secondary-container": "#00716a",
+                        "surface-container-high": "#2a2a2a",
+                        "on-secondary-fixed": "#00201d",
+                        "secondary-fixed-dim": "#00ded1",
+                        "on-tertiary-fixed": "#022100",
+                        "surface-dim": "#131313",
+                        "primary-fixed": "#d6e3ff",
+                        "surface-tint": "#b9c7e4",
+                        "surface-container-highest": "#353534",
+                        "surface-bright": "#393939",
+                        "on-tertiary-fixed-variant": "#095300",
+                        "surface": "#131313",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-error": "#690005",
+                        "tertiary-fixed-dim": "#2ae500",
+                        "tertiary-container": "#021f00",
+                        "on-primary-fixed-variant": "#39475f",
+                        "primary-container": "#0a192f",
+                        "on-error-container": "#ffdad6",
+                        "inverse-on-surface": "#313030",
+                        "on-tertiary-container": "#199700",
+                        "primary-fixed-dim": "#b9c7e4",
+                        "secondary-container": "#00fdee",
+                        "on-primary-fixed": "#0d1c32"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-margin": "24px",
+                        "stack-lg": "32px",
+                        "unit": "8px",
+                        "gutter": "16px",
+                        "stack-sm": "8px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Geist"],
+                        "label-sm": ["Geist"],
+                        "display-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen font-body-md overflow-hidden">
+<!-- Top AppBar (from JSON) -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-container-margin h-16 bg-background/80 backdrop-blur-xl border-b border-white/10 shadow-[0_0_20px_rgba(0,255,240,0.05)]">
+<div onclick="window.location.href='dashboard.html'" class="flex items-center gap-stack-md cursor-pointer">
+<div onclick="window.location.href='profile.html'" class="w-10 h-10 rounded-full overflow-hidden border border-secondary-fixed/30 cursor-pointer">
+<img alt="User Profile Photo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwNLbpX4kzOatiJhJxn4_1uPBF3P3_WDkXTHtJZxooVKtS5aP-iDSWX9JfU7-APfyKr8DIpbhtz98CtAVVHrE2Ar2BZ1xOYL5YFI9llZaMc_5uhaZfYA8lp4kKKB65ApLuyuGSZg_PGGPGd_wN_zCqEa8zN_EE-IZMRg0wcPufUdhNk7bK3Iq-SY0tqBg3Sgx4u4hB9T511HP4EiQmfNzfTOX-rirzwtg-hojSN4b9V-ttmZ-PSnugtMvOD5XEOj4u1L8yOlddRY5q"/>
+</div>
+<h1 class="font-display-lg text-headline-md-mobile md:text-headline-md text-secondary-fixed tracking-tight">SafeRoute</h1>
+</div>
+<button class="text-secondary-fixed font-bold hover:opacity-80 transition-opacity active:scale-95 transition-transform px-4 py-1 glass-panel rounded-full">
+            தமிழ்
+        </button>
+</header>
+<!-- Main Map Canvas -->
+<main class="relative h-screen w-full pt-16">
+<!-- Interactive Map (Simulated) -->
+<div class="absolute inset-0 z-0">
+<img alt="Large Map view" class="w-full h-full object-cover grayscale opacity-40 contrast-125" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5iNIELvazIJqww5NttMPY60y1IUZ2xM2izWtnPm69Pp8wI3z0XCxfY7NyCjvl3ipQjiR56pXYIhjoRBX6Aadqbk9rQIley8HE5be4G8sYI1RpQwi6GsKe2qUYDDUmIH61ZzoUDC94JPqyJyLotccx5wpj82-Y8ottlKHZ3e1xLEzPzSzA5LFy6ju0hrAXWv3d0GEe-elPf-fQaWukf23qp6M4I0fe5ujrjvENuAuNsElzA2yFE29Xrcpy5y8rrFLdURwv2FrQ18Dc"/>
+<div class="absolute inset-0 map-gradient-overlay pointer-events-none"></div>
+<!-- Trip Pulse Marker -->
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+<div class="relative flex items-center justify-center">
+<div class="absolute w-12 h-12 bg-secondary-fixed/20 rounded-full animate-ping"></div>
+<div class="absolute w-8 h-8 bg-secondary-fixed/40 rounded-full animate-pulse"></div>
+<div class="w-4 h-4 bg-secondary-fixed rounded-full border-2 border-white shadow-[0_0_15px_rgba(0,253,238,0.8)]"></div>
+</div>
+</div>
+</div>
+<!-- Floating UI Overlays -->
+<div class="relative z-20 h-full w-full pointer-events-none p-container-margin flex flex-col justify-between">
+<!-- Top Section: Dynamic Notifications & Status -->
+<div class="flex flex-col gap-4 max-w-md pointer-events-auto">
+<!-- Safety Status Gauge -->
+<div class="glass-panel p-4 rounded-xl flex items-center gap-4 cyan-glow">
+<div class="relative w-12 h-12">
+<svg class="w-full h-full" viewbox="0 0 36 36">
+<path class="text-white/10" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="100, 100" stroke-width="3"></path>
+<path class="text-tertiary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="85, 100" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10px] font-bold text-tertiary">85%</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 bg-tertiary rounded-full animate-pulse"></span>
+<h3 class="font-headline-md text-[16px] text-white">Active Monitoring</h3>
+</div>
+<p class="font-label-sm text-on-surface-variant">Risk Level: <span class="text-tertiary">Low Risk</span></p>
+</div>
+</div>
+<!-- Dynamic Notification -->
+<div class="glass-panel p-4 rounded-xl flex items-center gap-3 border-l-4 border-secondary-fixed transform transition-all duration-500 hover:translate-x-2" id="dynamic-notif">
+<span class="material-symbols-outlined text-secondary-fixed">traffic</span>
+<p class="font-body-md text-white text-sm">Heavy traffic detected 500m ahead.</p>
+</div>
+</div>
+<!-- Bottom Section: ETA & Controls -->
+<div class="flex flex-col gap-6 items-center w-full mb-16">
+<!-- ETA Floating Panel -->
+<div class="glass-panel px-8 py-4 rounded-full flex items-center gap-6 cyan-glow pointer-events-auto">
+<div class="text-center">
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest">Arriving In</p>
+<p class="font-display-lg text-headline-md text-secondary-fixed">12 mins</p>
+</div>
+<div class="h-10 w-[1px] bg-white/10"></div>
+<div class="text-center">
+<p class="font-label-sm text-on-surface-variant uppercase tracking-widest">ETA</p>
+<p class="font-display-lg text-headline-md text-white">22:45</p>
+</div>
+</div>
+<!-- Actions Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-4xl pointer-events-auto">
+<!-- Share Trip -->
+<button class="glass-panel p-4 rounded-xl flex items-center justify-between group hover:bg-white/10 transition-all duration-300">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-secondary-fixed/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="share">share</span>
+</div>
+<span class="font-label-md text-white">Share Live Trip with Family</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+<!-- Report Incident -->
+<button onclick="window.location.href='alerts.html'" class="glass-panel p-4 rounded-xl flex items-center justify-between group hover:bg-white/10 transition-all duration-300">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-warning-orange/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="warning">warning</span>
+</div>
+<span class="font-label-md text-white">Report Incident</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+<!-- SOS Emergency -->
+<button onclick="alert('SOS Emergency Triggered! Emergency response team and contacts Priya & Rajesh have been notified.');" class="bg-error p-4 rounded-xl flex items-center justify-center gap-3 active:scale-95 transition-transform shadow-[0_0_30px_rgba(255,180,171,0.3)]">
+<span class="material-symbols-outlined text-on-error font-bold" data-icon="emergency" style="font-variation-settings: 'FILL' 1;">emergency</span>
+<span class="font-display-lg text-label-md text-on-error uppercase tracking-tighter">SOS</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation (from JSON) -->
+<nav class="fixed bottom-0 w-full h-20 px-4 flex justify-around items-center bg-surface-container/10 backdrop-blur-2xl border-t border-white/10 shadow-[0_-4px_20px_rgba(0,0,0,0.4)] z-50">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-secondary-fixed-dim transition-colors active:scale-90 duration-200" href="dashboard.html">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-secondary-fixed-dim transition-colors active:scale-90 duration-200" href="routes.html">
+<span class="material-symbols-outlined" data-icon="route">route</span>
+<span class="font-label-sm text-label-sm">Routes</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary-fixed bg-white/5 rounded-full p-2 active:scale-90 duration-200" href="tracking.html">
+<span class="material-symbols-outlined" data-icon="emergency" style="font-variation-settings: 'FILL' 1;">emergency</span>
+<span class="font-label-sm text-label-sm">SOS</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-secondary-fixed-dim transition-colors active:scale-90 duration-200" href="alerts.html">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="font-label-sm text-label-sm">Alerts</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-secondary-fixed-dim transition-colors active:scale-90 duration-200" href="profile.html">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions for dynamic notifications
+        const notifications = [
+            "Heavy traffic detected 500m ahead.",
+            "Route optimized: Saved 2 mins.",
+            "AI Guard: Environment scan clear.",
+            "Approaching safe zone in 1km."
+        ];
+        let currentNotif = 0;
+        const notifElement = document.getElementById('dynamic-notif');
+        const notifText = notifElement.querySelector('p');
+
+        setInterval(() => {
+            if (notifElement) {
+                notifElement.style.opacity = '0';
+                notifElement.style.transform = 'translateY(-10px)';
+                
+                setTimeout(() => {
+                    currentNotif = (currentNotif + 1) % notifications.length;
+                    notifText.innerText = notifications[currentNotif];
+                    notifElement.style.opacity = '1';
+                    notifElement.style.transform = 'translateY(0)';
+                }, 500);
+            }
+        }, 8000);
+
+        // Simulated pulse and movement for the map marker
+        let posX = 0;
+        let posY = 0;
+        function animateMarker() {
+            posX = Math.sin(Date.now() / 2000) * 5;
+            posY = Math.cos(Date.now() / 2500) * 5;
+            const marker = document.querySelector('.relative.flex.items-center.justify-center');
+            if(marker) {
+                marker.style.transform = `translate(${posX}px, ${posY}px)`;
+            }
+            requestAnimationFrame(animateMarker);
+        }
+        animateMarker();
+    </script>
+</body></html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SafeRoute Agent | Route Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Geist:wght@400;500;600&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(32, 31, 31, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .safest-border {
+            border-color: #00fdee;
+            box-shadow: 0 0 20px rgba(0, 253, 238, 0.1);
+        }
+        .map-gradient-overlay {
+            background: linear-gradient(to bottom, rgba(19, 19, 19, 0.8) 0%, rgba(19, 19, 19, 0) 20%, rgba(19, 19, 19, 0) 80%, rgba(19, 19, 19, 0.9) 100%);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "background": "#131313",
+                      "on-surface-variant": "#c5c6cd",
+                      "on-tertiary": "#053900",
+                      "on-background": "#e5e2e1",
+                      "tertiary-fixed": "#79ff5b",
+                      "on-secondary": "#003733",
+                      "surface-container-low": "#1c1b1b",
+                      "secondary": "#ffffff",
+                      "primary": "#b9c7e4",
+                      "outline-variant": "#44474d",
+                      "surface-container": "#201f1f",
+                      "outline": "#8f9097",
+                      "on-primary": "#233148",
+                      "error": "#ffb4ab",
+                      "error-container": "#93000a",
+                      "on-surface": "#e5e2e1",
+                      "inverse-primary": "#515f78",
+                      "secondary-fixed": "#00fdee",
+                      "surface-variant": "#353534",
+                      "tertiary": "#2ae500",
+                      "on-secondary-fixed-variant": "#00504b",
+                      "inverse-surface": "#e5e2e1",
+                      "on-primary-container": "#74829d",
+                      "on-secondary-container": "#00716a",
+                      "surface-container-high": "#2a2a2a",
+                      "on-secondary-fixed": "#00201d",
+                      "secondary-fixed-dim": "#00ded1",
+                      "on-tertiary-fixed": "#022100",
+                      "surface-dim": "#131313",
+                      "primary-fixed": "#d6e3ff",
+                      "surface-tint": "#b9c7e4",
+                      "surface-container-highest": "#353534",
+                      "surface-bright": "#393939",
+                      "on-tertiary-fixed-variant": "#095300",
+                      "surface": "#131313",
+                      "surface-container-lowest": "#0e0e0e",
+                      "on-error": "#690005",
+                      "tertiary-fixed-dim": "#2ae500",
+                      "tertiary-container": "#021f00",
+                      "on-primary-fixed-variant": "#39475f",
+                      "primary-container": "#0a192f",
+                      "on-error-container": "#ffdad6",
+                      "inverse-on-surface": "#313030",
+                      "on-tertiary-container": "#199700",
+                      "primary-fixed-dim": "#b9c7e4",
+                      "secondary-container": "#00fdee",
+                      "on-primary-fixed": "#0d1c32"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-margin": "24px",
+                      "stack-lg": "32px",
+                      "unit": "8px",
+                      "gutter": "16px",
+                      "stack-sm": "8px",
+                      "stack-md": "16px"
+              },
+              "fontFamily": {
+                      "label-md": ["Geist"],
+                      "label-sm": ["Geist"],
+                      "display-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-secondary-fixed/30 min-h-screen overflow-x-hidden">
+<!-- Top Navigation Anchor -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-xl border-b border-white/10 shadow-[0_0_20px_rgba(0,255,240,0.05)] flex justify-between items-center px-container-margin h-16">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-secondary-fixed font-headline-md text-headline-md" style="font-variation-settings: 'FILL' 1;">security</span>
+<h1 class="font-display-lg text-headline-md-mobile text-secondary-fixed tracking-tight">SafeRoute</h1>
+</div>
+<div class="flex items-center gap-6">
+<span class="hidden md:block font-label-md text-label-md text-on-surface-variant hover:opacity-80 transition-opacity cursor-pointer">Explore</span>
+<span class="hidden md:block font-label-md text-label-md text-secondary-fixed font-bold">Routes</span>
+<button class="text-secondary-fixed font-label-md text-label-md active:scale-95 transition-transform px-3 py-1 border border-secondary-fixed/20 rounded-lg">தமிழ்</button>
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-white/10 flex items-center justify-center overflow-hidden">
+<img alt="User Profile Photo" data-alt="A close-up portrait of a modern urban traveler with a confident expression, set against a blurred background of city lights at twilight. The lighting is cinematic with subtle cyan and magenta highlights, reflecting a high-tech safety aesthetic. The overall mood is professional and secure, emphasizing the human element of the SafeRoute intelligence system." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2m2oF-wlAMbr1qZWUZZNoIT2Xd970MpGfMU-yHCGE1epkES-e-TB165pb-gBIBxIKxcerWt6MC0BMJWhyfHKftx1Sjl8awFQTNmuEXdXpY3xFJ1VYFAH87EDuv1uUePVk0oAx8OvJlD5Hspn5UDDechTmX5IXXaE7plW2ZBeJiXcBsuMVD_3o85HCQ3iueryE1FQFrL_VXgLwTT6e_HlYBChaWMgzCEOX31TRZ3mtyPzOL8zJcTNW6YBGTEmCfhKFYlwu3K2Flscy"/>
+</div>
+</div>
+</header>
+<!-- Background Map Canvas -->
+<div class="fixed inset-0 z-0">
+<div class="absolute inset-0 map-gradient-overlay z-10 pointer-events-none"></div>
+<div class="w-full h-full grayscale-[0.8] opacity-40 contrast-[1.2] brightness-[0.6]">
+<!-- This represents the live interactive map view -->
+<img alt="City Map Background" class="w-full h-full object-cover" data-alt="An expansive aerial perspective of a complex urban street network at night, captured in a high-contrast dark mode aesthetic. The streets are defined by glowing lines of traffic and cool blue city lights, with deep navy shadows filling the blocks in between. The atmosphere is quiet and sophisticated, resembling a premium digital map interface from a high-end navigation system." data-location="London" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCuUIswVMmpKe-ojg41r2LYdpEZbsrmr3Cq7pxs4TCyPQnE8NA0iqC_8eJpwDrHBQA_thVfaOyMljN0_h7X7dFzO9cfIQPo9ZiiML4XHC4x8QcMeVHIAUNd4340rysfHLENqkAz4KoLHWkNPlUINsIAmNeYzU03fFwaVWzfmbU1MZ4eiG9DVhscqNT1gdFmfjEDFFzPuAkirOriwQgoBZVAyZsCYg9GRuZVMUwmUl-zKVFs7s-pYLdqWaFQ-_Hn4nocccHlQRQBizxu"/>
+</div>
+</div>
+<!-- Main Content Layout -->
+<main class="relative z-20 pt-24 pb-32 px-container-margin max-w-7xl mx-auto flex flex-col gap-stack-lg">
+<!-- Search Section -->
+<section class="w-full max-w-2xl mx-auto">
+<div class="glass-card rounded-2xl p-4 md:p-6 flex flex-col gap-4 relative shadow-2xl border border-white/10">
+<!-- Start Location -->
+<div class="flex items-center gap-4 bg-white/5 rounded-xl px-4 py-3 group focus-within:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-secondary-fixed opacity-70" style="font-variation-settings: 'FILL' 0;">my_location</span>
+<div class="flex-1">
+<p class="text-[10px] uppercase tracking-wider text-on-surface-variant/60 font-bold mb-0.5">Current Location</p>
+<input class="bg-transparent border-none p-0 text-body-lg font-body-md w-full focus:ring-0 placeholder:text-on-surface-variant/40" placeholder="Enter start point" type="text" value="Your Location"/>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/40 cursor-pointer hover:text-secondary-fixed transition-colors">mic</span>
+</div>
+<!-- Swap Icon Button -->
+<div class="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 z-10">
+<button class="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center border-2 border-[#131313] hover:rotate-180 transition-transform duration-500 shadow-lg">
+<span class="material-symbols-outlined text-[20px] font-bold">swap_vert</span>
+</button>
+</div>
+<!-- Destination -->
+<div class="flex items-center gap-4 bg-white/5 rounded-xl px-4 py-3 group focus-within:bg-white/10 transition-colors border-l-4 border-secondary-fixed">
+<span class="material-symbols-outlined text-secondary-fixed" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<div class="flex-1">
+<p class="text-[10px] uppercase tracking-wider text-on-surface-variant/60 font-bold mb-0.5">Where to?</p>
+<input class="bg-transparent border-none p-0 text-body-lg font-body-md w-full focus:ring-0 placeholder:text-on-surface-variant/40" placeholder="Enter destination" type="text" value="Covent Garden Market"/>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/40 cursor-pointer hover:text-secondary-fixed transition-colors">search</span>
+</div><div class="flex gap-3 mt-1">
+<button class="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:border-secondary-fixed/50 transition-all group">
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]" style="font-variation-settings: 'FILL' 0;">home</span>
+<span class="font-label-md text-label-md text-on-surface-variant group-hover:text-secondary-fixed">Home</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 hover:border-secondary-fixed/50 transition-all group">
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]" style="font-variation-settings: 'FILL' 0;">work</span>
+<span class="font-label-md text-label-md text-on-surface-variant group-hover:text-secondary-fixed">Work</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Route Comparison Grid -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter items-start"><div class="glass-card md:col-span-3 rounded-xl p-stack-md flex flex-col gap-stack-sm hover:scale-[1.01] transition-transform cursor-pointer relative overflow-hidden border-secondary-fixed/30">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary-fixed uppercase tracking-widest">Home Route Preview</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-tertiary text-[18px]" style="font-variation-settings: 'FILL' 1;">shield</span>
+<span class="font-label-sm text-label-sm text-tertiary">98% Secure</span>
+</div>
+</div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mt-2">
+<div>
+<h2 class="text-secondary font-headline-md">Commute to Home</h2>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg text-secondary">22</span>
+<span class="font-body-md text-body-md text-on-surface-variant">mins</span>
+</div>
+</div>
+<div class="flex-1 max-w-md">
+<div class="bg-secondary-fixed/5 rounded-lg p-stack-sm border border-secondary-fixed/10">
+<p class="font-label-sm text-label-sm text-on-surface italic">
+<span class="text-secondary-fixed font-bold not-italic">AI Summary:</span> "Route is clear with optimal lighting. AI recommends departure now to avoid 6:00 PM congestion."
+                </p>
+</div>
+</div>
+<button class="bg-secondary-fixed text-on-secondary-fixed px-6 py-3 rounded-xl font-label-md font-bold hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-secondary-fixed/20 flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">navigation</span>
+            START NAVIGATION
+        </button>
+</div>
+</div>
+<!-- Safest Route Card (Recommended) -->
+<div class="glass-card safest-border rounded-xl p-stack-md flex flex-col gap-stack-sm hover:scale-[1.02] transition-transform cursor-pointer relative overflow-hidden">
+<div class="absolute top-0 right-0 bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm px-3 py-1 rounded-bl-lg">
+                    RECOMMENDED
+                </div>
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-secondary-fixed uppercase tracking-widest">Safest Route</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-tertiary text-[18px]" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-label-sm text-label-sm text-tertiary">100% Secure</span>
+</div>
+</div>
+<div class="flex items-baseline gap-2 mt-2">
+<span class="font-headline-lg text-headline-lg text-secondary">25</span>
+<span class="font-body-md text-body-md text-on-surface-variant">mins</span>
+</div>
+<!-- Mini Route Preview -->
+<div class="h-32 w-full rounded-lg bg-surface-container-lowest/50 border border-white/5 my-stack-sm relative overflow-hidden">
+<div class="absolute inset-0 flex items-center justify-center">
+<svg class="w-4/5 h-4/5" viewbox="0 0 100 100">
+<path d="M10,80 Q30,20 50,50 T90,20" fill="none" stroke="#00fdee" stroke-dasharray="1 6" stroke-linecap="round" stroke-width="3"></path>
+<circle cx="10" cy="80" fill="#00fdee" r="4"></circle>
+<circle cx="90" cy="20" fill="#00fdee" r="4"></circle>
+</svg>
+</div>
+</div>
+<div class="space-y-unit">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]">info</span>
+<p class="font-body-md text-body-md text-on-surface-variant">0 risk zones detected</p>
+</div>
+<div class="bg-secondary-fixed/5 rounded-lg p-stack-sm border border-secondary-fixed/10">
+<p class="font-label-sm text-label-sm text-secondary-fixed italic">AI Note: "Optimized for well-lit streets and high-visibility areas."</p>
+</div>
+</div>
+</div>
+<!-- Fastest Route Card -->
+<div class="glass-card rounded-xl p-stack-md flex flex-col gap-stack-sm hover:scale-[1.02] transition-transform cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Fastest Route</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-error text-[18px]" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-label-sm text-label-sm text-error">High Risk</span>
+</div>
+</div>
+<div class="flex items-baseline gap-2 mt-2">
+<span class="font-headline-lg text-headline-lg text-secondary">18</span>
+<span class="font-body-md text-body-md text-on-surface-variant">mins</span>
+</div>
+<!-- Mini Route Preview -->
+<div class="h-32 w-full rounded-lg bg-surface-container-lowest/50 border border-white/5 my-stack-sm relative overflow-hidden">
+<div class="absolute inset-0 flex items-center justify-center">
+<svg class="w-4/5 h-4/5" viewbox="0 0 100 100">
+<path d="M10,80 L90,20" fill="none" stroke="#ffb4ab" stroke-linecap="round" stroke-width="2"></path>
+<circle class="animate-pulse" cx="50" cy="50" fill="none" r="10" stroke="#ffb4ab" stroke-width="1"></circle>
+<circle cx="10" cy="80" fill="#ffb4ab" r="3"></circle>
+<circle cx="90" cy="20" fill="#ffb4ab" r="3"></circle>
+</svg>
+</div>
+</div>
+<div class="space-y-unit">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]">info</span>
+<p class="font-body-md text-body-md text-on-surface-variant">2 high-risk zones detected</p>
+</div>
+<div class="bg-error/5 rounded-lg p-stack-sm border border-error/10">
+<p class="font-label-sm text-label-sm text-error italic">AI Note: "Heavy traffic and construction on By-pass road."</p>
+</div>
+</div>
+</div>
+<!-- Balanced Route Card -->
+<div class="glass-card rounded-xl p-stack-md flex flex-col gap-stack-sm hover:scale-[1.02] transition-transform cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Balanced Route</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">balance</span>
+<span class="font-label-sm text-label-sm text-primary">Fair Score</span>
+</div>
+</div>
+<div class="flex items-baseline gap-2 mt-2">
+<span class="font-headline-lg text-headline-lg text-secondary">21</span>
+<span class="font-body-md text-body-md text-on-surface-variant">mins</span>
+</div>
+<!-- Mini Route Preview -->
+<div class="h-32 w-full rounded-lg bg-surface-container-lowest/50 border border-white/5 my-stack-sm relative overflow-hidden">
+<div class="absolute inset-0 flex items-center justify-center">
+<svg class="w-4/5 h-4/5" viewbox="0 0 100 100">
+<path d="M10,80 C40,80 60,20 90,20" fill="none" stroke="#b9c7e4" stroke-linecap="round" stroke-width="2"></path>
+<circle cx="10" cy="80" fill="#b9c7e4" r="3"></circle>
+<circle cx="90" cy="20" fill="#b9c7e4" r="3"></circle>
+</svg>
+</div>
+</div>
+<div class="space-y-unit">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[16px]">info</span>
+<p class="font-body-md text-body-md text-on-surface-variant">Low risk profile</p>
+</div>
+<div class="bg-primary/5 rounded-lg p-stack-sm border border-primary/10">
+<p class="font-label-sm text-label-sm text-primary-fixed-dim italic">AI Note: "Good balance of speed and lighting conditions."</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Safety Stats Bento -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="glass-card md:col-span-2 rounded-xl p-stack-md flex items-center justify-between overflow-hidden relative">
+<div class="space-y-2 relative z-10">
+<h3 class="font-headline-md text-headline-md text-secondary">AI Threat Monitor</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Scanning 1,402 proximity nodes...</p>
+<div class="flex items-center gap-4 pt-2">
+<div class="flex flex-col">
+<span class="text-tertiary font-display-lg text-headline-lg">Low</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Local Risk</span>
+</div>
+<div class="h-10 w-px bg-white/10"></div>
+<div class="flex flex-col">
+<span class="text-secondary-fixed font-display-lg text-headline-lg">84%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Confidence</span>
+</div>
+</div>
+</div>
+<!-- Abstract AI visualization -->
+<div class="absolute right-0 top-0 h-full w-1/2 opacity-20 overflow-hidden">
+<div class="w-full h-full bg-gradient-to-l from-secondary-fixed to-transparent animate-pulse"></div>
+</div>
+</div>
+<div class="glass-card rounded-xl p-stack-md flex flex-col items-center justify-center gap-unit text-center">
+<div class="w-12 h-12 rounded-full border-2 border-tertiary flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-tertiary">contact_emergency</span>
+</div>
+<h4 class="font-label-md text-label-md text-secondary">Active SOS</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Contacts notified on start</p>
+</div>
+<div class="glass-card rounded-xl p-stack-md flex flex-col items-center justify-center gap-unit text-center">
+<div class="w-12 h-12 rounded-full border-2 border-secondary-fixed/50 flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-secondary-fixed">psychology</span>
+</div>
+<h4 class="font-label-md text-label-md text-secondary">Predictive AI</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Real-time crime data active</p>
+</div>
+</section>
+</main>
+<!-- Navigation Shell Anchor -->
+<nav class="fixed bottom-0 w-full rounded-t-xl z-50 bg-surface-container/10 backdrop-blur-2xl border-t border-white/10 shadow-[0_-4px_20px_rgba(0,0,0,0.4)] flex justify-around items-center h-20 px-4 md:hidden">
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-secondary-fixed-dim transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-secondary-fixed bg-white/5 rounded-full p-2 active:scale-90 duration-200 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="route">route</span>
+<span class="font-label-sm text-label-sm">Routes</span>
+</div>
+<div class="flex flex-col items-center justify-center text-error hover:text-error-container transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="emergency" style="font-variation-settings: 'FILL' 1;">emergency</span>
+<span class="font-label-sm text-label-sm">SOS</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-secondary-fixed-dim transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="font-label-sm text-label-sm">Alerts</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant hover:text-secondary-fixed-dim transition-colors cursor-pointer">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</div>
+</nav>
+<!-- FAB Action (Contextual: Start Route) -->
+<button class="fixed bottom-24 right-container-margin md:bottom-12 md:right-12 z-50 bg-secondary-fixed text-on-secondary-fixed p-5 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all group overflow-hidden">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined font-bold" style="font-variation-settings: 'FILL' 1;">navigation</span>
+<span class="font-label-md text-label-md hidden group-hover:block whitespace-nowrap transition-all duration-300">START NAVIGATION</span>
+</div>
+</button>
+<script>
+        // Simple interactive effect for route cards
+        document.querySelectorAll('.glass-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.borderColor = 'rgba(0, 253, 238, 0.4)';
+            });
+            card.addEventListener('mouseleave', () => {
+                if (!card.classList.contains('safest-border')) {
+                    card.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                } else {
+                    card.style.borderColor = '#00fdee';
+                }
+            });
+        });
+    </script>
+</body></html>
